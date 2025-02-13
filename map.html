@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>現在地中心の地図</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Routing Machine CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <style>
+    #map {
+      height: 100vh; /* 地図を画面いっぱいに表示 */
+      width: 100%;
+    }
+    .leaflet-routing-container {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Routing Machine JS -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <script>
+    let currentLatLng;
+    let currentRoute;
+    const walkingSpeedKmH = 4.8; // 平均的な歩行速度（時速4.8km）
+
+    // 距離を計算する関数
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // 地球の半径（km）
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c;
+      return distance;
+    }
+
+    // 時間を計算する関数
+    function calculateTime(distanceKm) {
+      const timeHours = distanceKm / walkingSpeedKmH;
+      const timeMinutes = Math.round(timeHours * 60);
+      return timeMinutes;
+    }
+
+    // 地図の初期化
+    const map = L.map('map'); // 初期位置を設定せずに初期化
+
+    // OpenStreetMapのタイルレイヤーを追加
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // 現在地を取得
+    function getCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            currentLatLng = [lat, lng];
+
+            // 現在地を中心に地図を移動
+            map.setView(currentLatLng, 13);
+
+            // 現在地にマーカーを追加
+            L.marker(currentLatLng)
+              .addTo(map)
+              .bindPopup("現在地")
+              .openPopup();
+
+            // 半径の円を描画
+            const radii = [1000, 2000, 3000, 4000, 5000, 10000]; // 単位はメートル
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
+            radii.forEach((radius, index) => {
+              L.circle(currentLatLng, {
+                color: colors[index],
+                fillColor: colors[index],
+                fillOpacity: 0,  // 塗りつぶしなし
+                weight: 2,       // 線の太さを設定
+                radius: radius
+              }).addTo(map);
+            });
+          },
+          (error) => {
+            console.error("位置情報の取得に失敗しました:", error);
+          }
+        );
+      } else {
+        alert("お使いのブラウザは位置情報に対応していません。");
+      }
+    }
+
+    // クリックイベントの処理
+    map.on('click', function(e) {
+      if (currentLatLng) {
+        const clickedLat = e.latlng.lat;
+        const clickedLng = e.latlng.lng;
+        
+        // 既存のルートがあれば削除
+        if (currentRoute) {
+          map.removeControl(currentRoute);
+        }
+
+        // ルート検索と表示
+        currentRoute = L.Routing.control({
+          waypoints: [
+            L.latLng(currentLatLng[0], currentLatLng[1]),
+            L.latLng(clickedLat, clickedLng)
+          ],
+          router: L.Routing.osrmv1({
+            serviceUrl: 'https://router.project-osrm.org/route/v1',
+            profile: 'foot'  // 徒歩ルートを指定
+          }),
+          lineOptions: {
+            styles: [{color: '#0000ff', opacity: 0.6, weight: 4}]
+          },
+          createMarker: function() { return null; }  // デフォルトのマーカーを非表示
+        }).addTo(map);
+
+        // ルート計算後の処理
+        currentRoute.on('routesfound', function(e) {
+          const routes = e.routes;
+          const distanceKm = routes[0].summary.totalDistance / 1000;  // メートルからキロメートルに変換
+          const timeMinutes = calculateTime(distanceKm);
+
+          // 距離と時間の表示テキストを作成
+          const distanceText = distanceKm < 1 ? 
+            `${Math.round(distanceKm * 1000)}m` : 
+            `${distanceKm.toFixed(1)}km`;
+          
+          const timeText = timeMinutes >= 60 ? 
+            `${Math.floor(timeMinutes/60)}時間${timeMinutes%60}分` : 
+            `${timeMinutes}分`;
+
+          // マーカーを追加して情報を表示
+          L.marker([clickedLat, clickedLng])
+            .addTo(map)
+            .bindPopup(`ここまでの道のり: ${distanceText}<br>徒歩所要時間: ${timeText}`)
+            .openPopup();
+        });
+      }
+    });
+
+    // 現在地を取得して地図を更新
+    getCurrentLocation();
+  </script>
+</body>
+</html>

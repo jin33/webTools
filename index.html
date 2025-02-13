@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+        }
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .app-icon:hover {
+            transform: scale(1.05);
+        }
+        .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .countdown-icon {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+        }
+        .map-icon {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+        .icon-text {
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+        .material-icons {
+            color: white;
+            font-size: 30px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="app-grid">
+        <a href="countdown.html" class="app-icon">
+            <div class="icon countdown-icon">
+                <span class="material-icons">timer</span>
+            </div>
+            <span class="icon-text">カウントダウン</span>
+        </a>
+        <a href="map.html" class="app-icon">
+            <div class="icon map-icon">
+                <span class="material-icons">map</span>
+            </div>
+            <span class="icon-text">マップ</span>
+        </a>
+    </div>
+</body>
+</html>
