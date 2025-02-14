@@ -47,12 +47,14 @@
         .calendar {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
         .calendar th {
             padding: 10px;
             background-color: #f8f9fa;
             color: #666;
             font-weight: 500;
+            width: 14.28%;  /* 7日で等分 */
         }
         .calendar td {
             padding: 10px;
@@ -308,12 +310,14 @@
             const tbody = document.getElementById('calendarBody');
             tbody.innerHTML = '';
             
+            let currentRow;
+            
             while (date <= lastDay || date.getDay() !== 0) {
                 if (date.getDay() === 0) {
-                    tbody.insertRow();
+                    currentRow = tbody.insertRow();
                 }
                 
-                const cell = tbody.rows[tbody.rows.length - 1].insertCell();
+                const cell = currentRow.insertCell();
                 const dateString = date.toISOString().split('T')[0];
                 
                 // 日付の表示を構造化
@@ -332,7 +336,7 @@
                 }
                 
                 if (date.getMonth() !== month) {
-                    cell.className = 'other-month';
+                    cell.classList.add('other-month');
                 }
                 
                 if (dateString === new Date().toISOString().split('T')[0]) {
