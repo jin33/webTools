@@ -310,40 +310,39 @@
             const tbody = document.getElementById('calendarBody');
             tbody.innerHTML = '';
             
-            let currentRow;
-            
             while (date <= lastDay || date.getDay() !== 0) {
                 if (date.getDay() === 0) {
-                    currentRow = tbody.insertRow();
-                }
-                
-                const cell = currentRow.insertCell();
-                const dateString = date.toISOString().split('T')[0];
-                
-                // 日付の表示を構造化
-                const dateNumber = document.createElement('div');
-                dateNumber.className = 'date-number';
-                dateNumber.textContent = date.getDate();
-                cell.appendChild(dateNumber);
+                    const row = tbody.insertRow();
+                    for (let i = 0; i < 7; i++) {
+                        const cell = row.insertCell();
+                        const dateString = date.toISOString().split('T')[0];
+                        
+                        const dateNumber = document.createElement('div');
+                        dateNumber.className = 'date-number';
+                        dateNumber.textContent = date.getDate();
+                        cell.appendChild(dateNumber);
 
-                // ウォーキング情報の表示
-                if (walkingRecords[dateString]) {
-                    const walkInfo = document.createElement('div');
-                    walkInfo.className = 'walk-info';
-                    walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
-                    cell.appendChild(walkInfo);
-                    cell.classList.add('walked');
+                        if (walkingRecords[dateString]) {
+                            const walkInfo = document.createElement('div');
+                            walkInfo.className = 'walk-info';
+                            walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
+                            cell.appendChild(walkInfo);
+                            cell.classList.add('walked');
+                        }
+                        
+                        if (date.getMonth() !== month) {
+                            cell.classList.add('other-month');
+                        }
+                        
+                        if (dateString === new Date().toISOString().split('T')[0]) {
+                            cell.classList.add('today');
+                        }
+                        
+                        date.setDate(date.getDate() + 1);
+                    }
+                } else {
+                    date.setDate(date.getDate() + 1);
                 }
-                
-                if (date.getMonth() !== month) {
-                    cell.classList.add('other-month');
-                }
-                
-                if (dateString === new Date().toISOString().split('T')[0]) {
-                    cell.classList.add('today');
-                }
-                
-                date.setDate(date.getDate() + 1);
             }
         }
 
