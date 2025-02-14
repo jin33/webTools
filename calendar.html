@@ -61,6 +61,19 @@
             height: 80px;
             vertical-align: top;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .calendar .date-number {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .calendar .walk-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: auto;
+            padding-bottom: 20px;
         }
         .calendar .other-month {
             color: #ccc;
@@ -77,7 +90,7 @@
             position: absolute;
             bottom: 5px;
             right: 5px;
-            font-size: 20px;
+            font-size: 16px;
         }
         .add-record {
             position: fixed;
@@ -148,6 +161,56 @@
             background-color: #4CAF50;
             color: white;
         }
+        .data-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .data-controls button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .data-controls button:hover {
+            background-color: #e4e6e9;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .summary h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .summary-item {
+            text-align: center;
+            padding: 10px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .summary-item .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .summary-item .value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -158,7 +221,36 @@
                 <h2 id="currentMonth"></h2>
                 <button onclick="changeMonth(1)">▶</button>
             </div>
+            <div class="data-controls">
+                <button onclick="exportData()">
+                    <span class="material-icons">file_download</span>
+                    エクスポート
+                </button>
+                <button onclick="importData()">
+                    <span class="material-icons">file_upload</span>
+                    インポート
+                </button>
+            </div>
         </div>
+        
+        <div class="summary">
+            <h3>今月の記録</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="label">合計距離</div>
+                    <div class="value" id="totalDistance">0 km</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">ウォーキング日数</div>
+                    <div class="value" id="walkingDays">0 日</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">平均距離</div>
+                    <div class="value" id="averageDistance">0 km</div>
+                </div>
+            </div>
+        </div>
+
         <table class="calendar">
             <thead>
                 <tr>
@@ -224,7 +316,20 @@
                 const cell = tbody.rows[tbody.rows.length - 1].insertCell();
                 const dateString = date.toISOString().split('T')[0];
                 
-                cell.textContent = date.getDate();
+                // 日付の表示を構造化
+                const dateNumber = document.createElement('div');
+                dateNumber.className = 'date-number';
+                dateNumber.textContent = date.getDate();
+                cell.appendChild(dateNumber);
+
+                // ウォーキング情報の表示
+                if (walkingRecords[dateString]) {
+                    const walkInfo = document.createElement('div');
+                    walkInfo.className = 'walk-info';
+                    walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
+                    cell.appendChild(walkInfo);
+                    cell.classList.add('walked');
+                }
                 
                 if (date.getMonth() !== month) {
                     cell.className = 'other-month';
@@ -232,10 +337,6 @@
                 
                 if (dateString === new Date().toISOString().split('T')[0]) {
                     cell.classList.add('today');
-                }
-                
-                if (walkingRecords[dateString]) {
-                    cell.classList.add('walked');
                 }
                 
                 date.setDate(date.getDate() + 1);
@@ -275,6 +376,72 @@
             closeModal();
             updateCalendar();
         }
+
+        function updateSummary() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            let totalDistance = 0;
+            let walkingDays = 0;
+
+            // 現在の月のデータを集計
+            Object.entries(walkingRecords).forEach(([date, record]) => {
+                const recordDate = new Date(date);
+                if (recordDate.getFullYear() === year && recordDate.getMonth() === month) {
+                    totalDistance += record.distance;
+                    walkingDays++;
+                }
+            });
+
+            const averageDistance = walkingDays > 0 ? totalDistance / walkingDays : 0;
+
+            document.getElementById('totalDistance').textContent = `${totalDistance.toFixed(1)} km`;
+            document.getElementById('walkingDays').textContent = `${walkingDays} 日`;
+            document.getElementById('averageDistance').textContent = `${averageDistance.toFixed(1)} km`;
+        }
+
+        function exportData() {
+            const data = JSON.stringify(walkingRecords, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'walking-records.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        walkingRecords = importedData;
+                        localStorage.setItem('walkingRecords', JSON.stringify(walkingRecords));
+                        updateCalendar();
+                        updateSummary();
+                        alert('データを正常にインポートしました');
+                    } catch (error) {
+                        alert('データの読み込みに失敗しました');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // カレンダー更新時にサマリーも更新
+        const originalUpdateCalendar = updateCalendar;
+        updateCalendar = function() {
+            originalUpdateCalendar();
+            updateSummary();
+        };
 
         // 初期表示
         updateCalendar();
