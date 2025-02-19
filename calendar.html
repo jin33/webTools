@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             padding: 20px;
             color: #333;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -20,17 +22,20 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .month-selector {
             display: flex;
             align-items: center;
             gap: 15px;
         }
+
         .month-selector button {
             background: none;
             border: none;
@@ -38,24 +43,29 @@
             cursor: pointer;
             color: #666;
         }
+
         .month-selector h2 {
             margin: 0;
             font-size: 20px;
             min-width: 200px;
             text-align: center;
         }
+
         .calendar {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
         }
+
         .calendar th {
             padding: 10px;
             background-color: #f8f9fa;
             color: #666;
             font-weight: 500;
-            width: 14.28%;  /* 7日で等分 */
+            width: 14.28%;
+            /* 7日で等分 */
         }
+
         .calendar td {
             padding: 10px;
             text-align: center;
@@ -67,26 +77,32 @@
             flex-direction: column;
             justify-content: space-between;
         }
+
         .calendar .date-number {
             font-size: 16px;
             margin-bottom: 5px;
         }
+
         .calendar .walk-info {
             font-size: 12px;
             color: #666;
             margin-top: auto;
             padding-bottom: 20px;
         }
+
         .calendar .other-month {
             color: #ccc;
             background-color: #f8f9fa;
         }
+
         .calendar .today {
             background-color: #e8f5e9;
         }
+
         .calendar .walked {
             position: relative;
         }
+
         .calendar .walked::after {
             content: '🚶';
             position: absolute;
@@ -94,6 +110,7 @@
             right: 5px;
             font-size: 16px;
         }
+
         .add-record {
             position: fixed;
             bottom: 20px;
@@ -107,10 +124,11 @@
             justify-content: center;
             align-items: center;
             font-size: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             border: none;
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -118,26 +136,31 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background-color: white;
             padding: 20px;
             border-radius: 12px;
             width: 300px;
         }
+
         .modal-content h3 {
             margin-top: 0;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
         }
+
         .form-group input {
             width: 100%;
             padding: 8px;
@@ -145,28 +168,34 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         .button-group {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
         }
+
         .button-group button {
             padding: 8px 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
+
         .button-group button.cancel {
             background-color: #f8f9fa;
         }
+
         .button-group button.save {
             background-color: #4CAF50;
             color: white;
         }
+
         .data-controls {
             display: flex;
             gap: 10px;
         }
+
         .data-controls button {
             padding: 8px 16px;
             border: none;
@@ -178,36 +207,43 @@
             align-items: center;
             gap: 5px;
         }
+
         .data-controls button:hover {
             background-color: #e4e6e9;
         }
+
         .summary {
             margin-top: 20px;
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 8px;
         }
+
         .summary h3 {
             margin: 0 0 10px 0;
             color: #333;
         }
+
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
         }
+
         .summary-item {
             text-align: center;
             padding: 10px;
             background-color: white;
             border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+
         .summary-item .label {
             font-size: 14px;
             color: #666;
             margin-bottom: 5px;
         }
+
         .summary-item .value {
             font-size: 18px;
             font-weight: 600;
@@ -215,6 +251,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -234,7 +271,7 @@
                 </button>
             </div>
         </div>
-        
+
         <div class="summary">
             <h3>今月の記録</h3>
             <div class="summary-grid">
@@ -295,56 +332,60 @@
         let walkingRecords = JSON.parse(localStorage.getItem('walkingRecords') || '{}');
 
         function updateCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            
-            document.getElementById('currentMonth').textContent = 
-                `${year}年 ${month + 1}月`;
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            
-            let date = new Date(firstDay);
-            date.setDate(date.getDate() - date.getDay());
+    document.getElementById('currentMonth').textContent =
+        `${year}年 ${month + 1}月`;
 
-            const tbody = document.getElementById('calendarBody');
-            tbody.innerHTML = '';
-            
-            while (date <= lastDay || date.getDay() !== 0) {
-                if (date.getDay() === 0) {
-                    const row = tbody.insertRow();
-                    for (let i = 0; i < 7; i++) {
-                        const cell = row.insertCell();
-                        const dateString = date.toISOString().split('T')[0];
-                        
-                        const dateNumber = document.createElement('div');
-                        dateNumber.className = 'date-number';
-                        dateNumber.textContent = date.getDate();
-                        cell.appendChild(dateNumber);
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
 
-                        if (walkingRecords[dateString]) {
-                            const walkInfo = document.createElement('div');
-                            walkInfo.className = 'walk-info';
-                            walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
-                            cell.appendChild(walkInfo);
-                            cell.classList.add('walked');
-                        }
-                        
-                        if (date.getMonth() !== month) {
-                            cell.classList.add('other-month');
-                        }
-                        
-                        if (dateString === new Date().toISOString().split('T')[0]) {
-                            cell.classList.add('today');
-                        }
-                        
-                        date.setDate(date.getDate() + 1);
-                    }
-                } else {
-                    date.setDate(date.getDate() + 1);
-                }
+    // 月の最初の日が属する週の日曜日を取得
+    let startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - startDate.getDay());
+
+    // 月の最終日が属する週の土曜日を取得
+    let endDate = new Date(lastDay);
+    endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
+
+    const tbody = document.getElementById('calendarBody');
+    tbody.innerHTML = '';
+
+    let date = new Date(startDate);
+    while (date <= endDate) {
+        const row = tbody.insertRow();
+
+        for (let i = 0; i < 7; i++) {
+            const cell = row.insertCell();
+            const currentDate = new Date(date); // 現在の日付をコピーして保持
+            const dateString = currentDate.toISOString().split('T')[0];
+
+            const dateNumber = document.createElement('div');
+            dateNumber.className = 'date-number';
+            dateNumber.textContent = currentDate.getDate();
+            cell.appendChild(dateNumber);
+
+            if (walkingRecords[dateString]) {
+                const walkInfo = document.createElement('div');
+                walkInfo.className = 'walk-info';
+                walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
+                cell.appendChild(walkInfo);
+                cell.classList.add('walked');
             }
+
+            if (currentDate.getMonth() !== month) {
+                cell.classList.add('other-month');
+            }
+
+            if (dateString === new Date().toISOString().split('T')[0]) {
+                cell.classList.add('today');
+            }
+
+            date.setDate(date.getDate() + 1);
         }
+    }
+}
 
         function changeMonth(delta) {
             currentDate.setMonth(currentDate.getMonth() + delta);
@@ -365,7 +406,7 @@
         function saveRecord() {
             const date = document.getElementById('walkDate').value;
             const distance = document.getElementById('walkDistance').value;
-            
+
             if (!date || !distance) {
                 alert('日付と距離を入力してください');
                 return;
@@ -374,7 +415,7 @@
             walkingRecords[date] = {
                 distance: parseFloat(distance)
             };
-            
+
             localStorage.setItem('walkingRecords', JSON.stringify(walkingRecords));
             closeModal();
             updateCalendar();
@@ -419,10 +460,10 @@
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
-            input.onchange = function(event) {
+            input.onchange = function (event) {
                 const file = event.target.files[0];
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     try {
                         const importedData = JSON.parse(e.target.result);
                         walkingRecords = importedData;
@@ -441,7 +482,7 @@
 
         // カレンダー更新時にサマリーも更新
         const originalUpdateCalendar = updateCalendar;
-        updateCalendar = function() {
+        updateCalendar = function () {
             originalUpdateCalendar();
             updateSummary();
         };
@@ -450,7 +491,7 @@
         updateCalendar();
 
         // モーダルの外側をクリックしたら閉じる
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('recordModal');
             if (event.target === modal) {
                 closeModal();
@@ -458,4 +499,5 @@
         }
     </script>
 </body>
-</html> 
+
+</html>
