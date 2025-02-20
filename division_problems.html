@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>割り算問題生成</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .problem {
+            margin-bottom: 10px;
+        }
+        .column {
+            display: inline-block;
+            width: 150px; /* Adjust as needed */
+            vertical-align: top;
+        }
+        #answers {
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <h1>割り算問題</h1>
+    <button id="generateButton">ランダム作成</button>
+    <button id="pdfButton">PDF出力</button>
+    <div id="problems"></div>
+    <div id="answers"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const generateButton = document.getElementById('generateButton');
+        const pdfButton = document.getElementById('pdfButton');
+        const problemsDiv = document.getElementById('problems');
+        const answersDiv = document.getElementById('answers');
+
+        let currentProblems = [];
+        let currentAnswers = [];
+
+        function generateProblems() {
+            let problems = [];
+            let answers = [];
+
+           // 2-digit dividend problems
+            for (let i = 0; i < 20; i++) {
+                let divisor, quotient, dividend;
+                do {
+                    divisor = Math.floor(Math.random() * 8) + 2; // 2 to 9
+                    quotient = Math.floor(Math.random() * 89) + 11; // 11 to 99
+                    dividend = divisor * quotient;
+                } while (dividend > 99 || Math.floor(dividend / 10) % divisor === 0);
+
+                problems.push({ dividend: dividend, divisor: divisor });
+                answers.push(quotient);
+            }
+
+            // 3-digit dividend problems
+            for (let i = 0; i < 20; i++) {
+                let divisor = Math.floor(Math.random() * 8) + 2; // 2 to 9
+                let quotient = Math.floor(Math.random() * 90) + 10; // 10 to 99
+                while (divisor * quotient < 100) {
+                    quotient = Math.floor(Math.random() * 90) + 10;
+                }
+                let dividend = divisor * quotient;
+
+                problems.push({ dividend: dividend, divisor: divisor });
+                answers.push(quotient);
+            }
+
+            return { problems: problems, answers: answers };
+        }
+
+       function displayProblems() {
+            const { problems, answers } = generateProblems();
+            currentProblems = problems;
+            currentAnswers = answers;
+
+            let leftColumnHTML = '';
+            let rightColumnHTML = '';
+
+            for (let i = 0; i < problems.length; i++) {
+                let problemNumber = i + 1;
+                let problemHTML = `<div class="problem">(${problemNumber}) ${problems[i].dividend} ÷ ${problems[i].divisor} = </div>`;
+
+                if (i < 20) {
+                    leftColumnHTML += problemHTML;
+                } else {
+                    rightColumnHTML += problemHTML;
+                }
+            }
+
+            let problemsHTML = `
+                <div style="display: flex;">
+                    <div style="width: 50%;">${leftColumnHTML}</div>
+                    <div style="width: 50%;">${rightColumnHTML}</div>
+                </div>
+            `;
+
+            problemsDiv.innerHTML = problemsHTML;
+            answersDiv.innerHTML = '';
+        }
+
+        generateButton.addEventListener('click', displayProblems);
+
+        pdfButton.addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            doc.setFontSize(12);
+            doc.addFont('helvetica', 'normal');
+
+            const margin = 15; // Left margin in mm
+            let x1 = margin; // X position for left column
+            let x2 = 105; // X position for right column
+            let y = 20;
+            let page = 1;
+
+            doc.text('割り算問題', margin, 10);
+
+            // First page: Problems without answers
+            for (let i = 0; i < currentProblems.length; i++) {
+                let problemNumber = i + 1;
+                let problemText = `(${problemNumber}) ${currentProblems[i].dividend} ÷ ${currentProblems[i].divisor} = `;
+                let x = (i < 20) ? x1 : x2; // Select column based on problem number
+
+                doc.text(problemText, x, y);
+                y += 10;
+
+                if (i === 19) {
+                    y = 20; // Reset Y position for right column
+                }
+
+                if (y > 270) {
+                    doc.addPage();
+                    doc.text('割り算問題', margin, 10); // Header for new page
+                    page++;
+                    x1 = margin;
+                    x2 = 105;
+                    y = 20;
+                }
+            }
+
+            // Second page: Problems with answers
+            doc.addPage();
+            doc.text('答え', margin, 10);
+            page++;
+            x1 = margin;
+            x2 = 105;
+            y = 20;
+
+            for (let i = 0; i < currentProblems.length; i++) {
+                let problemNumber = i + 1;
+                let problemText = `(${problemNumber}) ${currentProblems[i].dividend} ÷ ${currentProblems[i].divisor} = ${currentAnswers[i]}`;
+                let x = (i < 20) ? x1 : x2; // Select column based on problem number
+
+                doc.text(problemText, x, y);
+                y += 10;
+
+                if (i === 19) {
+                    y = 20; // Reset Y position for right column
+                }
+
+                if (y > 270) {
+                    doc.addPage();
+                    doc.text('答え', margin, 10); // Header for new page
+                    page++;
+                    x1 = margin;
+                    x2 = 105;
+                    y = 20;
+                }
+            }
+
+            doc.save('division_problems.pdf');
+        });
+
+        // Initial display
+        displayProblems();
+    </script>
+</body>
+</html>
