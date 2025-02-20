@@ -73,7 +73,6 @@
             height: 80px;
             vertical-align: top;
             position: relative;
-            display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
@@ -332,60 +331,56 @@
         let walkingRecords = JSON.parse(localStorage.getItem('walkingRecords') || '{}');
 
         function updateCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            document.getElementById('currentMonth').textContent = 
+                `${year}年 ${month + 1}月`;
 
-    document.getElementById('currentMonth').textContent =
-        `${year}年 ${month + 1}月`;
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            let date = new Date(firstDay);
+            date.setDate(date.getDate() - date.getDay());
 
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
+            const tbody = document.getElementById('calendarBody');
+            tbody.innerHTML = '';
+            
+            while (date <= lastDay || date.getDay() !== 0) {
+                if (date.getDay() === 0) {
+                    const row = tbody.insertRow();
+                    for (let i = 0; i < 7; i++) {
+                        const cell = row.insertCell();
+                        const dateString = date.toISOString().split('T')[0];
+                        
+                        const dateNumber = document.createElement('div');
+                        dateNumber.className = 'date-number';
+                        dateNumber.textContent = date.getDate();
+                        cell.appendChild(dateNumber);
 
-    // 月の最初の日が属する週の日曜日を取得
-    let startDate = new Date(firstDay);
-    startDate.setDate(startDate.getDate() - startDate.getDay());
-
-    // 月の最終日が属する週の土曜日を取得
-    let endDate = new Date(lastDay);
-    endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
-
-    const tbody = document.getElementById('calendarBody');
-    tbody.innerHTML = '';
-
-    let date = new Date(startDate);
-    while (date <= endDate) {
-        const row = tbody.insertRow();
-
-        for (let i = 0; i < 7; i++) {
-            const cell = row.insertCell();
-            const currentDate = new Date(date); // 現在の日付をコピーして保持
-            const dateString = currentDate.toISOString().split('T')[0];
-
-            const dateNumber = document.createElement('div');
-            dateNumber.className = 'date-number';
-            dateNumber.textContent = currentDate.getDate();
-            cell.appendChild(dateNumber);
-
-            if (walkingRecords[dateString]) {
-                const walkInfo = document.createElement('div');
-                walkInfo.className = 'walk-info';
-                walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
-                cell.appendChild(walkInfo);
-                cell.classList.add('walked');
+                        if (walkingRecords[dateString]) {
+                            const walkInfo = document.createElement('div');
+                            walkInfo.className = 'walk-info';
+                            walkInfo.textContent = `${walkingRecords[dateString].distance.toFixed(1)}km`;
+                            cell.appendChild(walkInfo);
+                            cell.classList.add('walked');
+                        }
+                        
+                        if (date.getMonth() !== month) {
+                            cell.classList.add('other-month');
+                        }
+                        
+                        if (dateString === new Date().toISOString().split('T')[0]) {
+                            cell.classList.add('today');
+                        }
+                        
+                        date.setDate(date.getDate() + 1);
+                    }
+                } else {
+                    date.setDate(date.getDate() + 1);
+                }
             }
-
-            if (currentDate.getMonth() !== month) {
-                cell.classList.add('other-month');
-            }
-
-            if (dateString === new Date().toISOString().split('T')[0]) {
-                cell.classList.add('today');
-            }
-
-            date.setDate(date.getDate() + 1);
         }
-    }
-}
 
         function changeMonth(delta) {
             currentDate.setMonth(currentDate.getMonth() + delta);
@@ -499,5 +494,4 @@
         }
     </script>
 </body>
-
-</html>
+</html> 
