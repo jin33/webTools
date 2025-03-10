@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名言の泉</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&display=swap');
+
+        :root {
+            --text-primary: #333;
+            --text-secondary: #666;
+            --accent-color: #4a6fa5;
+            --bg-primary: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background: var(--bg-primary);
+            background-image: linear-gradient(120deg, #f6f7f9 0%, #e9edf2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .quote-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .quote {
+            position: absolute;
+            max-width: 800px;
+            width: 80%;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity 1.5s, transform 1.5s;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .quote.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quote.fade-out {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .quote-text::before {
+            content: "“";
+            font-size: 4rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+            position: absolute;
+            top: -2rem;
+            left: -1rem;
+            font-family: serif;
+        }
+
+        .quote-text::after {
+            content: "”";
+            font-size: 4rem;
+            color: var(--accent-color);
+            opacity: 0.2;
+            position: absolute;
+            bottom: -3rem;
+            right: -1rem;
+            font-family: serif;
+        }
+
+        .quote-author {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            display: block;
+            text-align: right;
+            font-style: italic;
+        }
+
+        .quote-author::before {
+            content: "― ";
+        }
+
+        .quote-icon {
+            color: var(--accent-color);
+            opacity: 0.7;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        @media (max-width: 768px) {
+            .quote {
+                width: 90%;
+                padding: 2rem;
+            }
+            
+            .quote-text {
+                font-size: 1.4rem;
+            }
+            
+            .quote-author {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quote {
+                width: 95%;
+                padding: 1.5rem;
+            }
+            
+            .quote-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    <div class="quote-container" id="quoteContainer"></div>
+
+    <script type="module">
+        import quotes from './meigen_data.js';
+
+        async function main() {
+            const container = document.getElementById('quoteContainer');
+
+            function getRandomQuote() {
+                const index = Math.floor(Math.random() * quotes.length);
+                return quotes[index];
+            }
+
+            function showQuote() {
+                const [quote, author] = getRandomQuote();
+                const quoteElement = document.createElement('div');
+                quoteElement.classList.add('quote');
+
+                // ランダムな位置に配置
+                const x = Math.random() * 80;
+                const y = Math.random() * 80;
+                quoteElement.style.left = `${x}%`;
+                quoteElement.style.top = `${y}%`;
+                quoteElement.style.transform = 'translate(-50%, -50%) scale(0.95)';
+
+                quoteElement.innerHTML = `
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="quote-text">${quote}</div>
+                    <span class="quote-author">${author}</span>
+                `;
+
+                container.appendChild(quoteElement);
+
+                // アニメーション
+                quoteElement.style.opacity = 0;
+                quoteElement.classList.add('active');
+
+                createParticles(quoteElement);
+
+                setTimeout(() => {
+                    quoteElement.classList.remove('active');
+                    quoteElement.classList.add('fade-out');
+                    setTimeout(() => {
+                        container.removeChild(quoteElement);
+                    }, 1500);
+                }, 6000);
+            }
+
+            // キラキラパーティクルエフェクトの作成
+            function createParticles(element) {
+                const numParticles = 7;
+                const colors = ['#4a6fa5', '#6983b0', '#8a9dbb', '#abc0e1', '#c8d5ea'];
+
+                for (let i = 0; i < numParticles; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.classList.add('particle');
+
+                        // ランダムなサイズとポジション
+                        const size = Math.random() * 15 + 5;
+                        const x = Math.random() * 100;
+                        const y = Math.random() * 100;
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+
+                        particle.style.width = `${size}px`;
+                        particle.style.height = `${size}px`;
+                        particle.style.left = `${x}%`;
+                        particle.style.top = `${y}%`;
+                        particle.style.background = color;
+                        particle.style.position = 'absolute';
+
+                        container.appendChild(particle);
+
+                        // アニメーションの適用
+                        setTimeout(() => {
+                            particle.style.opacity = '0.7';
+                            particle.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`;
+                            particle.style.transition = `all ${Math.random() * 2 + 2}s ease-out`;
+
+                            // アニメーション終了後に要素を削除
+                            setTimeout(() => {
+                                particle.remove();
+                            }, 3000);
+                        }, 10);
+                    }, i * 300);
+                }
+            }
+
+            // 初回表示
+            showQuote();
+
+            // 一定間隔で更新
+            setInterval(showQuote, 8000);
+        }
+
+        // スクリプト実行
+        main();
+    </script>
+</body>
+</html>
