@@ -65,16 +65,17 @@
             text-align: center;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%) scale(0.95);
         }
 
         .quote.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .quote.fade-out {
             opacity: 0;
-            transform: translateY(-30px);
+            transform: translate(-50%, -50%) translateY(-30px);
         }
 
         .quote-text {
@@ -86,25 +87,25 @@
         }
 
         .quote-text::before {
-            content: "“";
+            content: "「";
             font-size: 4rem;
             color: var(--accent-color);
             opacity: 0.2;
             position: absolute;
             top: -2rem;
             left: -1rem;
-            font-family: serif;
+            font-family: 'Noto Serif JP', serif;
         }
 
         .quote-text::after {
-            content: "”";
+            content: "」";
             font-size: 4rem;
             color: var(--accent-color);
             opacity: 0.2;
             position: absolute;
             bottom: -3rem;
             right: -1rem;
-            font-family: serif;
+            font-family: 'Noto Serif JP', serif;
         }
 
         .quote-author {
@@ -126,14 +127,6 @@
             opacity: 0.7;
             font-size: 1.5rem;
             margin-bottom: 1rem;
-        }
-
-        .particle {
-            position: absolute;
-            pointer-events: none;
-            background: var(--accent-color);
-            border-radius: 50%;
-            opacity: 0;
         }
 
         @media (max-width: 768px) {
@@ -167,10 +160,30 @@
     <div class="background-pattern"></div>
     <div class="quote-container" id="quoteContainer"></div>
 
-    <script type="module">
-        import quotes from './meigen_data.js';
+    <script>
+        // ダミーデータ（meigen_data.jsが読み込めない場合のバックアップ）
+        const fallbackQuotes = [
+            ["人生は短く、芸術は長し", "ヒポクラテス"],
+            ["知ることと知っていると思うことは違う", "孔子"],
+            ["賢者は歴史から学び、愚者は経験から学ぶ", "ビスマルク"],
+            ["人を信じよ、しかし、その百倍も自らを信じよ", "手塚治虫"],
+            ["人間は考える葦である", "パスカル"]
+        ];
 
         async function main() {
+            let quotes = fallbackQuotes;
+            
+            // モジュールとしてインポートを試みる
+            try {
+                const module = await import('./meigen_data.js');
+                if (module.default && Array.isArray(module.default)) {
+                    quotes = module.default;
+                    console.log("meigen_data.jsを読み込みました");
+                }
+            } catch (error) {
+                console.warn("meigen_data.jsの読み込みに失敗しました。ダミーデータを使用します", error);
+            }
+            
             const container = document.getElementById('quoteContainer');
 
             function getRandomQuote() {
@@ -184,12 +197,11 @@
                 quoteElement.classList.add('quote');
 
                 // ランダムな位置に配置
-                const x = Math.random() * 80;
-                const y = Math.random() * 80;
+                const x = 20 + Math.random() * 60; // 20%〜80%の範囲に制限
+                const y = 20 + Math.random() * 60; // 20%〜80%の範囲に制限
                 quoteElement.style.left = `${x}%`;
                 quoteElement.style.top = `${y}%`;
-                quoteElement.style.transform = 'translate(-50%, -50%) scale(0.95)';
-
+                
                 quoteElement.innerHTML = `
                     <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
                     <div class="quote-text">${quote}</div>
@@ -198,59 +210,23 @@
 
                 container.appendChild(quoteElement);
 
-                // アニメーション
-                quoteElement.style.opacity = 0;
-                quoteElement.classList.add('active');
+                // DOMに追加後、少し遅延してからアニメーションを開始
+                setTimeout(() => {
+                    quoteElement.classList.add('active');
+                }, 50);
 
-                createParticles(quoteElement);
-
+                // 一定時間後にフェードアウト
                 setTimeout(() => {
                     quoteElement.classList.remove('active');
                     quoteElement.classList.add('fade-out');
+                    
+                    // フェードアウト後に要素を削除
                     setTimeout(() => {
-                        container.removeChild(quoteElement);
+                        if (quoteElement.parentNode) {
+                            container.removeChild(quoteElement);
+                        }
                     }, 1500);
                 }, 6000);
-            }
-
-            // キラキラパーティクルエフェクトの作成
-            function createParticles(element) {
-                const numParticles = 7;
-                const colors = ['#4a6fa5', '#6983b0', '#8a9dbb', '#abc0e1', '#c8d5ea'];
-
-                for (let i = 0; i < numParticles; i++) {
-                    setTimeout(() => {
-                        const particle = document.createElement('div');
-                        particle.classList.add('particle');
-
-                        // ランダムなサイズとポジション
-                        const size = Math.random() * 15 + 5;
-                        const x = Math.random() * 100;
-                        const y = Math.random() * 100;
-                        const color = colors[Math.floor(Math.random() * colors.length)];
-
-                        particle.style.width = `${size}px`;
-                        particle.style.height = `${size}px`;
-                        particle.style.left = `${x}%`;
-                        particle.style.top = `${y}%`;
-                        particle.style.background = color;
-                        particle.style.position = 'absolute';
-
-                        container.appendChild(particle);
-
-                        // アニメーションの適用
-                        setTimeout(() => {
-                            particle.style.opacity = '0.7';
-                            particle.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`;
-                            particle.style.transition = `all ${Math.random() * 2 + 2}s ease-out`;
-
-                            // アニメーション終了後に要素を削除
-                            setTimeout(() => {
-                                particle.remove();
-                            }, 3000);
-                        }, 10);
-                    }, i * 300);
-                }
             }
 
             // 初回表示
