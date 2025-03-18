@@ -78,35 +78,15 @@
             transform: translate(-50%, -50%) translateY(-30px);
         }
 
-        .quote-text {
-            font-size: 1.8rem;
-            line-height: 1.6;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
+.quote-text {
+    font-size: 1.8rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    position: relative;
+    word-wrap: break-word;
+}
 
-        .quote-text::before {
-            content: "「";
-            font-size: 4rem;
-            color: var(--accent-color);
-            opacity: 0.2;
-            position: absolute;
-            top: -2rem;
-            left: -1rem;
-            font-family: 'Noto Serif JP', serif;
-        }
-
-        .quote-text::after {
-            content: "」";
-            font-size: 4rem;
-            color: var(--accent-color);
-            opacity: 0.2;
-            position: absolute;
-            bottom: -3rem;
-            right: -1rem;
-            font-family: 'Noto Serif JP', serif;
-        }
 
         .quote-author {
             font-size: 1.2rem;
