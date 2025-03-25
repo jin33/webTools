@@ -210,6 +210,30 @@
             border-bottom: 3px solid var(--primary-color);
         }
         
+        #overview .overview-card {
+            border-left: 5px solid #3a6ea5; /* 概要 */
+        }
+        
+        #hotels .hotel-card {
+            border-left: 5px solid #f44336; /* ホテル情報 */
+        }
+        
+        #attractions .overview-card {
+            border-left: 5px solid #4caf50; /* 都市 */
+        }
+        
+        #language .overview-card {
+            border-left: 5px solid #ff9800; /* 言語 */
+        }
+        
+        #currency .overview-card {
+            border-left: 5px solid #795548; /* 通貨 */
+        }
+        
+        .nav-tabs a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+        
         footer {
             text-align: center;
             padding: 1rem;
@@ -247,6 +271,8 @@
         <a href="#itinerary" class="nav-tab">旅程</a>
         <a href="#hotels" class="nav-tab">ホテル</a>
         <a href="#attractions" class="nav-tab">都市</a>
+        <a href="#language" class="nav-tab">言語</a>
+        <a href="#currency" class="nav-tab">通貨</a>
     </div>
     
     <div class="container">
@@ -528,8 +554,8 @@
        
         <section id="hotels">
             <h2>ホテル情報</h2>
-
-            <div class="hotel-card">
+        
+            <div class="hotel-card" style="border-left: 5px solid #f44336;">
                 <h3>プラハ (2泊)</h3>
                 <p><strong>ホテル名</strong>: イビス オールド タウン</p>
                 <p><strong>滞在期間</strong>: 2025年03月27日～03月29日 (2泊)</p>
@@ -538,33 +564,30 @@
                 <p><strong>FAX</strong>: 266 000666</p>
                 <p><strong>部屋タイプ</strong>: 部屋指定なし (2部屋/ツイン又はダブル)</p>
                 <p><strong>食事</strong>: 朝食付き</p>
-
-
             </div>
-
-            <div class="hotel-card">
+        
+            <div class="hotel-card" style="border-left: 5px solid #e91e63;">
                 <h3>ザルツブルク (1泊)</h3>
                 <p><strong>ホテル名</strong>: オーストリア トレンド ヨーロッパ ザルツブルク</p>
                 <p><strong>滞在期間</strong>: 2025年03月29日～03月30日 (1泊)</p>
                 <p><strong>部屋タイプ</strong>: 部屋指定なし (2部屋/ツイン又はダブル)</p>
                 <p><strong>食事</strong>: 朝食付き</p>
             </div>
-
-            <div class="hotel-card">
+        
+            <div class="hotel-card" style="border-left: 5px solid #9c27b0;">
                 <h3>ウィーン (2泊)</h3>
                 <p><strong>ホテル名</strong>: イビスウィーンマリアヒルフ</p>
                 <p><strong>滞在期間</strong>: 2025年03月30日～04月01日 (2泊)</p>
                 <p><strong>住所</strong>: MARIAHILFER GURTEL 22-24, 1060 - VIENNA</p>
                 <p><strong>電話</strong>: (+43)1/59998</p>
                 <p><strong>FAX</strong>: (+43)1/5979090</p>
-
             </div>
         </section>
 
         <section id="attractions">
             <h2>都市</h2>
         
-            <div class="overview-card" style="border-left: 5px solid green;">
+            <div class="overview-card" style="border-left: 5px solid #4caf50;">
                 <h3>プラハ</h3>
                 <p>
                     チェコ共和国の首都であり、その美しい建築物と豊かな文化で知られています。
@@ -578,7 +601,7 @@
                 </ul>
             </div>
         
-            <div class="overview-card" style="border-left: 5px solid green;">
+            <div class="overview-card" style="border-left: 5px solid #2196f3;">
                 <h3>チェスキークルムロフ</h3>
                 <p>
                     チェコ共和国の南ボヘミア地方に位置する美しい中世の町です。
@@ -591,7 +614,7 @@
                 </ul>
             </div>
         
-            <div class="overview-card" style="border-left: 5px solid green;">
+            <div class="overview-card" style="border-left: 5px solid #ff9800;">
                 <h3>ハルシュタット</h3>
                 <p>
                     オーストリアのザルツカンマーグート地方に位置する湖畔の村です。
@@ -604,7 +627,7 @@
                 </ul>
             </div>
             
-            <div class="overview-card" style="border-left: 5px solid green;">
+            <div class="overview-card" style="border-left: 5px solid #795548;">
                 <h3>ザルツブルク</h3>
                 <p>
                     ザルツブルクは、オーストリアの都市で、モーツァルトの生誕地として知られています。
@@ -617,7 +640,7 @@
                 </ul>
             </div>
 
-            <div class="overview-card" style="border-left: 5px solid green;">
+            <div class="overview-card" style="border-left: 5px solid #607d8b;">
                 <h3>ウィーン</h3>
                 <p>
                     ウィーンは、オーストリアの首都であり、音楽、美術、建築の中心地として知られています。
@@ -631,3 +654,231 @@
                 </ul>
             </div>
         </section>
+
+<!-- 言語セクション -->
+<section id="language">
+    <h2>現地の言語</h2>
+    
+    <div class="overview-card">
+        <h3>チェコ語（チェコ共和国）</h3>
+        <p>チェコ共和国ではチェコ語が公用語として使用されています。プラハやチェスキークルムロフでは観光地を中心に英語も通じますが、基本的な挨拶や表現を知っておくと便利です。</p>
+        
+        <h4>基本フレーズ</h4>
+        <table>
+            <tr>
+                <th>日本語</th>
+                <th>チェコ語</th>
+                <th>発音</th>
+            </tr>
+            <tr>
+                <td>こんにちは</td>
+                <td>Dobrý den</td>
+                <td>ドブリー デン</td>
+            </tr>
+            <tr>
+                <td>さようなら</td>
+                <td>Na shledanou</td>
+                <td>ナ スフレダノウ</td>
+            </tr>
+            <tr>
+                <td>ありがとう</td>
+                <td>Děkuji</td>
+                <td>ジェクイ</td>
+            </tr>
+            <tr>
+                <td>お願いします</td>
+                <td>Prosím</td>
+                <td>プロシーム</td>
+            </tr>
+            <tr>
+                <td>はい/いいえ</td>
+                <td>Ano/Ne</td>
+                <td>アノ/ネ</td>
+            </tr>
+            <tr>
+                <td>すみません</td>
+                <td>Promiňte</td>
+                <td>プロミニテ</td>
+            </tr>
+            <tr>
+                <td>英語を話せますか？</td>
+                <td>Mluvíte anglicky?</td>
+                <td>ムルヴィーテ アングリツキ？</td>
+            </tr>
+            <tr>
+                <td>トイレはどこですか？</td>
+                <td>Kde je toaleta?</td>
+                <td>グデ イェ トアレタ？</td>
+            </tr>
+            <tr>
+                <td>いくらですか？</td>
+                <td>Kolik to stojí?</td>
+                <td>コリク ト ストイー？</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="overview-card">
+        <h3>ドイツ語（オーストリア）</h3>
+        <p>オーストリアではドイツ語（オーストリア方言）が公用語として使用されています。ザルツブルクやウィーンでは観光地を中心に英語も通じますが、基本的な挨拶や表現を知っておくと便利です。</p>
+        
+        <h4>基本フレーズ</h4>
+        <table>
+            <tr>
+                <th>日本語</th>
+                <th>ドイツ語</th>
+                <th>発音</th>
+            </tr>
+            <tr>
+                <td>こんにちは</td>
+                <td>Grüß Gott</td>
+                <td>グリュース ゴット</td>
+            </tr>
+            <tr>
+                <td>さようなら</td>
+                <td>Auf Wiedersehen</td>
+                <td>アウフ ヴィーダーゼーエン</td>
+            </tr>
+            <tr>
+                <td>ありがとう</td>
+                <td>Danke</td>
+                <td>ダンケ</td>
+            </tr>
+            <tr>
+                <td>お願いします</td>
+                <td>Bitte</td>
+                <td>ビッテ</td>
+            </tr>
+            <tr>
+                <td>はい/いいえ</td>
+                <td>Ja/Nein</td>
+                <td>ヤー/ナイン</td>
+            </tr>
+            <tr>
+                <td>すみません</td>
+                <td>Entschuldigung</td>
+                <td>エントシュルディグング</td>
+            </tr>
+            <tr>
+                <td>英語を話せますか？</td>
+                <td>Sprechen Sie Englisch?</td>
+                <td>シュプレッヒェン ズィー エングリッシュ？</td>
+            </tr>
+            <tr>
+                <td>トイレはどこですか？</td>
+                <td>Wo ist die Toilette?</td>
+                <td>ヴォー イスト ディー トイレッテ？</td>
+            </tr>
+            <tr>
+                <td>いくらですか？</td>
+                <td>Wie viel kostet das?</td>
+                <td>ヴィー フィール コステット ダス？</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="important-info">
+        <h4>言語に関するヒント</h4>
+        <ul>
+            <li>地元の人々は、あなたが現地の言葉で挨拶するだけでも非常に喜びます。</li>
+            <li>主要観光地では多くの場合、英語を話すスタッフがいます。</li>
+            <li>レストランでは英語メニューを尋ねると便利です：「Do you have an English menu?」</li>
+            <li>翻訳アプリ（Google翻訳など）をダウンロードしておくと、オフラインでも使えて便利です。</li>
+        </ul>
+    </div>
+</section>
+
+<!-- 通貨セクション -->
+<section id="currency">
+    <h2>現地の通貨</h2>
+    
+    <div class="overview-card">
+        <h3>チェコ共和国：チェココルナ（CZK）</h3>
+        <p>チェコ共和国では「チェココルナ（Czech Koruna）」が使用されています。紙幣は100、200、500、1000、2000、5000コルナ、硬貨は1、2、5、10、20、50コルナがあります。</p>
+        
+        <h4>為替レート（おおよその目安）</h4>
+        <table>
+            <tr>
+                <th>日本円 → チェココルナ</th>
+                <th>チェココルナ → 日本円</th>
+            </tr>
+            <tr>
+                <td>1円 ≈ 0.15 CZK</td>
+                <td>1 CZK ≈ 6.67円</td>
+            </tr>
+            <tr>
+                <td>100円 ≈ 15 CZK</td>
+                <td>10 CZK ≈ 67円</td>
+            </tr>
+            <tr>
+                <td>1000円 ≈ 150 CZK</td>
+                <td>100 CZK ≈ 667円</td>
+            </tr>
+            <tr>
+                <td>10000円 ≈ 1500 CZK</td>
+                <td>1000 CZK ≈ 6670円</td>
+            </tr>
+        </table>
+        
+        <h4>支払いについて</h4>
+        <ul>
+            <li>主要なレストランやホテル、ショップではクレジットカードが使用できます。</li>
+            <li>小さな店舗やマーケットでは現金が必要な場合があります。</li>
+            <li>街中にATMが多くあり、日本のカードでも現地通貨が引き出せます。</li>
+            <li>銀行やホテル、空港の両替所で日本円からチェココルナに両替できますが、街中の両替所の方が一般的にレートが良いです。</li>
+        </ul>
+    </div>
+    
+    <div class="overview-card">
+        <h3>オーストリア：ユーロ（EUR）</h3>
+        <p>オーストリアではEU共通通貨の「ユーロ（Euro）」が使用されています。紙幣は5、10、20、50、100、200、500ユーロ、硬貨は1、2、5、10、20、50セント、1、2ユーロがあります。</p>
+        
+        <h4>為替レート（おおよその目安）</h4>
+        <table>
+            <tr>
+                <th>日本円 → ユーロ</th>
+                <th>ユーロ → 日本円</th>
+            </tr>
+            <tr>
+                <td>1円 = 0.006 EUR</td>
+                <td>1 EUR = 167円</td>
+            </tr>
+            <tr>
+                <td>100円 = 0.60 EUR</td>
+                <td>5 EUR = 835円</td>
+            </tr>
+            <tr>
+                <td>1000円 = 6 EUR</td>
+                <td>10 EUR = 1670円</td>
+            </tr>
+            <tr>
+                <td>10000円 = 60 EUR</td>
+                <td>100 EUR = 16700円</td>
+            </tr>
+        </table>
+        
+        <h4>支払いについて</h4>
+        <ul>
+            <li>ほとんどの場所でクレジットカードやデビットカードが使用できます。</li>
+            <li>Visaやマスターカードは広く受け入れられていますが、小さな店舗では現金が必要な場合もあります。</li>
+            <li>街中にATMが多くあり、日本のカードでも現地通貨が引き出せます。</li>
+            <li>500ユーロ紙幣は一部の店舗で受け付けられない場合があります。</li>
+        </ul>
+    </div>
+    
+    <div class="important-info">
+        <h4>通貨に関するヒント</h4>
+        <ul>
+            <li>出発前に少額の現地通貨を両替しておくと便利です。</li>
+            <li>クレジットカード利用時は、現地通貨で請求されるようにしましょう（DCC：Dynamic Currency Conversionは避けた方が良いです）。</li>
+            <li>両替所によってレートが大きく異なる場合があるので、複数の両替所を比較することをお勧めします。</li>
+            <li>チップ文化：チェコやオーストリアでは、レストランでのサービスに満足した場合、約10%のチップを支払うのが一般的です。</li>
+            <li>帰国時に余った小額通貨は、空港の免税店や寄付箱に寄付することもできます。</li>
+        </ul>
+    </div>
+    
+    <div class="map-container">
+        <img src="https://www.x-rates.com/graph/?from=EUR&to=JPY&amount=1" alt="ユーロから円へのレート推移">
+        <p style="text-align: center; font-size: 0.9rem; color: #666;">ユーロ/円の為替レート推移（イメージ）</p>
+    </div>
+</section>
