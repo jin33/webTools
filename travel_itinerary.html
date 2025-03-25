@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中欧4都市周遊旅行ガイド</title>
+    <style>
+        :root {
+            --primary-color: #3a6ea5;
+            --secondary-color: #ff6b6b;
+            --accent-color: #ffe66d;
+            --text-color: #333;
+            --light-bg: #f5f5f5;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f8f9fa;
+            padding-bottom: 50px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .hero-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin: 1.2rem 0 0.8rem;
+        }
+        
+        p, ul, ol {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 5px;
+        }
+        
+        .overview-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .day-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .day-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .day-date {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .itinerary-item {
+            display: flex;
+            margin-bottom: 0.8rem;
+        }
+        
+        .itinerary-time {
+            min-width: 70px;
+            font-weight: bold;
+        }
+        
+        .hotel-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .map-container {
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .important-info {
+            background-color: #fff8e1;
+            border-left: 5px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+        }
+        
+        .language-phrase {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--light-bg);
+        }
+        
+        .contact-info {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: white;
+            padding: 10px 0;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-tab {
+            flex: 0 0 auto;
+            padding: 8px 16px;
+            white-space: nowrap;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tab:hover {
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .two-columns {
+                display: flex;
+                gap: 1.5rem;
+            }
+            
+            .two-columns > div {
+                flex: 1;
+            }
+            
+            .day-cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>中欧4都市周遊旅行ガイド</h1>
+        <p>プラハ・チェスキークルムロフ・ハルシュタット・ウィーン 8日間</p>
+    </header>
+    
+    <div class="nav-tabs">
+        <a href="#overview" class="nav-tab">概要</a>
+        <a href="#itinerary" class="nav-tab">旅程</a>
+        <a href="#hotels" class="nav-tab">ホテル</a>
+        <a href="#attractions" class="nav-tab">見どころ</a>
+        <a href="#important" class="nav-tab">重要事項</a>
+        <a href="#contacts" class="nav-tab">連絡先</a>
+    </div>
+    
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Prague_Old_Town_Square_Jan_Hus_Memorial.jpg/800px-Prague_Old_Town_Square_Jan_Hus_Memorial.jpg" alt="中欧の風景" class="hero-image">
+        
+        <section id="overview" class="overview-card">
+            <h2>旅行概要</h2>
+            <p><strong>旅行期間</strong>: 2025年03月26日(水) ～ 2025年04月02日(水) [8日間]</p>
+            <p><strong>予約番号</strong>: 1250337-0</p>
+            <p><strong>旅行会社</strong>: 株式会社エス・ティー・ワールド 西欧ファクトリー</p>
+            <p><strong>担当者</strong>: 泉 優太</p>
+            <p><strong>電話番号</strong>: 050-5530-6744</p>
+            
+                        
+            <div class="map-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Map_of_Central_Europe.svg/800px-Map_of_Central_Europe.svg.png" alt="中欧4都市の位置関係">
+                <p style="text-align: center; font-size: 0.9rem; color: #666;">中欧4都市の位置関係</p>
+            </div>
+            
+            <h3>出発日の集合案内</h3>
+            <ul>
+                <li><strong>集合日</strong>: 2025年03月26日(水)</li>
+                <li><strong>集合場所</strong>: 成田国際空港 第2ターミナル カタール航空受付カウンター</li>
+                <li><strong>集合時刻</strong>: 18時55分</li>
+                <li><strong>出発時刻</strong>: 21時55分</li>
+                <li><strong>出発便</strong>: QR 807 (カタール航空)</li>
+            </ul>
+            <p><strong>注意事項</strong>: Eチケット控えとパスポートをご提示の上、直接ご搭乗のお手続きをお願い致します</p>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Narita_International_Airport_Terminal_2_entrance.jpg/800px-Narita_International_Airport_Terminal_2_entrance.jpg" alt="成田空港第2ターミナル">
+        </section>
+        
+        <section id="itinerary">
+            <h2>旅程表</h2>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">1日目</div>
+                    <div class="day-date">2025年03月26日(水)</div>
+                </div>
+                <h3>成田 → ドーハ</h3>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">21:55</div>
+                    <div>成田空港発 QR 807 カタール航空 (エコノミークラス)</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">翌04:40</div>
+                    <div>ドーハ着</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/A7-ALJ_Qatar_Airways_Airbus_A350-1041_arp.jpg/640px-A7-ALJ_Qatar_Airways_Airbus_A350-1041_arp.jpg" alt="カタール航空">
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">2日目</div>
+                    <div class="day-date">2025年03月27日(木)</div>
+                </div>
+                <h3>ドーハ → プラハ</h3>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">08:45</div>
+                    <div>ドーハ発 QR 291 カタール航空 (エコノミークラス)</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">13:25</div>
+                    <div>プラハ着</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">午後</div>
+                    <div>専用車でプラハ空港からホテルへ（現地語ドライバー）</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">夕方</div>
+                    <div>イビス オールド タウンにチェックイン（2泊）</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Prague_Old_Town_Square_Jan_Hus_Memorial.jpg/800px-Prague_Old_Town_Square_Jan_Hus_Memorial.jpg" alt="プラハの街並み">
+                
+                <div class="map-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Prague_1_location_map.svg/800px-Prague_1_location_map.svg.png" alt="プラハ市内マップ">
+                    <p style="text-align: center; font-size: 0.9rem; color: #666;">プラハ市内マップ</p>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">3日目</div>
+                    <div class="day-date">2025年03月28日(金)</div>
+                </div>
+                <h3>プラハ観光</h3>
+                <p><strong>観光</strong>: 【ランチ＆プラハ城入場案内付き！】ベアフットツアー 王道街歩き半日ツアー</p>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">09:00</div>
+                    <div>ヒベルニア劇場前集合（市民会館向かい側）</div>
+                </div>
+                <ul>
+                    <li>市民会館・火薬塔（外観）見学</li>
+                    <li>ユングマン広場～ベツレヘム教会（外観）見学</li>
+                    <li>カレル橋&プラハ城の写真スポット</li>
+                    <li>カレル橋の塔入場</li>
+                    <li>カレル橋散策</li>
+                    <li>プラハ城前広場到着</li>
+                </ul>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">13:00頃</div>
+                    <div>レストランにてランチ</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">14:00頃</div>
+                    <div>プラハ城入場</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">15:30頃</div>
+                    <div>黄金の小路入り口前にて解散<br>（黄金の小路～プラハ城出口まではお客様ご自身での見学となります）</div>
+                </div>
+                
+                <div class="two-columns">
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Prague_Castle_%284711439178%29.jpg/800px-Prague_Castle_%284711439178%29.jpg" alt="プラハ城">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">プラハ城</p>
+                    </div>
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Karluv_most_Praha_Czech_Republic_foto_Pudelek.jpg/800px-Karluv_most_Praha_Czech_Republic_foto_Pudelek.jpg" alt="カレル橋">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">カレル橋</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">4日目</div>
+                    <div class="day-date">2025年03月29日(土)</div>
+                </div>
+                <h3>プラハ → チェスキークルムロフ → ハルシュタット → ザルツブルク</h3>
+                <p><strong>移動</strong>: プラハ発～チェスキークルムロフ～ハルシュタット～ザルツブルグ【専用車】</p>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">07:30</div>
+                    <div>ホテル出発</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">午前</div>
+                    <div>プラハ～チェスキークルムロフ（約3時間）</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">午後</div>
+                    <div>チェスキークルムロフ観光（滞在時間：約2時間）</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">夕方</div>
+                    <div>ハルシュタット観光（滞在時間：約2時間）</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">夜</div>
+                    <div>ザルツブルグ到着<br>オーストリア トレンド エアポート センター(旧ラディソンSAS)にチェックイン（1泊）</div>
+                </div>
+                <p><strong>緊急連絡先</strong>: プラハ支店緊急連絡LINEID：@101tzzgz</p>
+                
+                <div class="map-container">
+                    <img src="https://www.google.com/maps/d/thumbnail?mid=1ev2wpeNqJ0LgwrTFexYeesNB0Jw" alt="プラハからザルツブルクへのルート">
+                    <p style="text-align: center; font-size: 0.9rem; color: #666;">プラハからザルツブルクへのルート</p>
+                </div>
+                
+                <div class="two-columns">
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/CeskyKrumlov130509_001.jpg/800px-CeskyKrumlov130509_001.jpg" alt="チェスキークルムロフ">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">チェスキークルムロフ</p>
+                    </div>
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Hallstatt_See.jpg/800px-Hallstatt_See.jpg" alt="ハルシュタット">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">ハルシュタット</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">5日目</div>
+                    <div class="day-date">2025年03月30日(日)</div>
+                </div>
+                <h3>ザルツブルク → ウィーン</h3>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">14:52</div>
+                    <div>ザルツブルク中央駅発 OT921 ウェストバーン（2等）</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">17:22</div>
+                    <div>ウィーン西駅着</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">夜</div>
+                    <div>イビスウィーンマリアヒルフにチェックイン（2泊）</div>
+                </div>
+                
+                <div class="two-columns">
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Hohensalzburg_castle_Austria_001.jpg/800px-Hohensalzburg_castle_Austria_001.jpg" alt="ザルツブルク">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">ザルツブルク</p>
+                    </div>
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Salzburg_city_districts.png/640px-Salzburg_city_districts.png" alt="ザルツブルク市内マップ">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">ザルツブルク市内マップ</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">6日目</div>
+                    <div class="day-date">2025年03月31日(月)</div>
+                </div>
+                <h3>ウィーン観光</h3>
+                <p>自由行動日（観光プランの記載なし）</p>
+                
+                <div class="two-columns">
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Wien_bezirke_nummeriert.png/800px-Wien_bezirke_nummeriert.png" alt="ウィーン市内マップ">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">ウィーン市内マップ</p>
+                    </div>
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Stephansdom_Vienna_Austria1.JPG/800px-Stephansdom_Vienna_Austria1.JPG" alt="ウィーンの街並み">
+                        <p style="text-align: center; font-size: 0.9rem; color: #666;">ウィーンの街並み</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">7日目</div>
+                    <div class="day-date">2025年04月01日(火)</div>
+                </div>
+                <h3>ウィーン → ドーハ</h3>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">午後</div>
+                    <div>専用車でホテルからウィーン空港へ（現地語ドライバー）</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">16:05</div>
+                    <div>ウィーン発 QR 184 カタール航空 (エコノミークラス)</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">22:35</div>
+                    <div>ドーハ着</div>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-title">8日目</div>
+                    <div class="day-date">2025年04月02日(水)</div>
+                </div>
+                <h3>ドーハ → 関西</h3>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">01:35</div>
+                    <div>ドーハ発 QR 802 カタール航空 (エコノミークラス)</div>
+                </div>
+                <div class="itinerary-item">
+                    <div class="itinerary-time">17:25</div>
+                    <div>大阪(関西)着</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Kansai-airport-terminal.jpg/800px-Kansai-airport-terminal.jpg" alt="関西国際空港">
+            </div>
+        </section>
+        
+        <section id="hotels">
+            <h2>ホテル情報</h2>
+            
+            <div class="hotel-card">
+                <h3>プラハ (2泊)</h3>
+                <p><strong>ホテル名</strong>: イビス オールド タウン</p>
+                <p><strong>滞在期間</strong>: 2025年03月27日～03月29日 (2泊)</p>
+                <p><strong>住所</strong>: Na Porici 5 110 00 Prague 1, Czech Republic</p>
+                <p><strong>電話</strong>: 266 000999</p>
+                <p><strong>FAX</strong>: 266 000666</p>
+                <p><strong>部屋タイプ</strong>: 部屋指定なし (2部屋/ツイン又はダブル)</p>
+                <p><strong>食事</strong>: 朝食付き</p>
+                
+                <div class="two-columns">
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Ibis_Praha_Old_Town.JPG/640px-Ibis_Praha_Old_Town.JPG" alt="イビス プラハ オールド タウン">
+                    </div>
+                    <div>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Ibis_Prague_Old_Town_Map.jpg/640px-Ibis_Prague_Old_Town_Map.jpg" alt="イビス プラハ オールド タウン周辺">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hotel-card">
+                <h3>ザルツブルク (1泊)</h3>
+                <p><strong>ホテル名</strong>: オーストリア トレンド エアポート センター(旧ラディソンSAS)</p>
+                <p><strong>滞在期間</strong>: 2025年03月29日～03月30日 (1泊)</p>
+                <p><strong>部屋タイプ</strong>: 部屋指定なし (2部屋/ツイン又はダブル)</p>
+                <p><strong>食事</strong>: 朝食付き</p>
+            </div>
+            
+            <div class="hotel-card">
+                <h3>ウィーン (2泊)</h3>
+                <p><strong>ホテル名</strong>: イビスウィーンマリアヒルフ</p>
+                <p><strong>滞在期間</strong>: 2025年03月30日～04月01日 (2泊)</p>
+                <p><strong>住所</strong>: MARIAHILFER GURTEL 22-24, 1060 - VIENNA</p>
+                <p><strong>電話</strong>: (+43)1/59998</p>
+                <p><strong>FAX</strong>: (+43)1/5979090</p>
